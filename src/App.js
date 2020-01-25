@@ -6,24 +6,37 @@ import Beers from './Module/Beer';
 
 const App =()=>{
   const SERVER = "https://api.punkapi.com/v2/beers";
+  const SERVER_NAME = "https://api.punkapi.com/v2/beers?beer_name=";
   const [beer, setBeer] = useState([]);
+  const [search, setSearch] = useState("");
   useEffect(()=>{
     console.log("SERVER is running...");
     getBeers();
-  } , []);
+  } , [search]);
   const getBeers = async ()=>{
-    const response = await fetch(SERVER) ; 
+    let response; 
+    if(search ===null || search ===""){
+     response  = await fetch(SERVER) ; 
+    }else{
+     response = await fetch(SERVER_NAME+search) ; 
+    }
+   
     const data = await response.json();
     console.log(data[0]);
     setBeer(data);
     
 
   }
+  const updateSearch = e=>{
+    setSearch(e.target.value) ;  
+    console.log(search);
+    
+  }
   return(
     <div className="container">
       <div className="center-allign">
         <div className="search-wrapper">
-          <input className="form-control" />
+          <input className="form-control"  value={search} onChange={updateSearch}/>
            
         </div>
       </div>
